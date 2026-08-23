@@ -9,8 +9,8 @@
     --bg:#0f1419;
     --panel:#1a2129;
     --panel-2:#222c36;
-    --accent:#ef8a3c;          /* Marken-Orange */
-    --accent-2:#f6a866;
+    --accent:#FF751F;          /* Accent Orange (CD Oliver Bartels) */
+    --accent-2:#ff9552;
     --accent-ink:#3a1f06;
     --text:#e8edf2;
     --muted:#9aa7b2;
@@ -44,7 +44,10 @@
   .btn:disabled{opacity:.45;cursor:default;}
 
   /* ---------- Logo ---------- */
-  .logo{display:block;margin:0 auto 6px;width:260px;max-width:72%;height:auto;color:var(--text);}
+  .logo{display:block;margin:0 auto;width:260px;max-width:100%;height:auto;}
+  /* Das Logo steht laut CD immer auf Weiß und wird nie umgefärbt. */
+  .logo-plate{display:block;margin:0 auto 10px;background:#FFFFFF;border-radius:4px;
+    padding:14px 18px;width:max-content;max-width:80%;}
   .logo-strap{text-align:center;color:var(--muted);font-size:12px;letter-spacing:.5px;margin-bottom:20px;}
 
   /* ---------- Setup screen ---------- */
@@ -102,6 +105,9 @@
   #statusline{font-size:12px;color:var(--muted);text-align:center;padding:4px 12px 0;min-height:18px;}
   .err{color:var(--danger);}
 
+  #fictionNote{max-width:820px;margin:0 auto;padding:0 14px 4px;font-size:12px;color:var(--muted);}
+  .report-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  .report-note{flex-basis:100%;font-size:12px;color:var(--muted);margin-top:2px;}
   /* ---------- Input bar ---------- */
   #inputbar{flex-shrink:0;border-top:1px solid var(--border);background:var(--panel);
     padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;}
@@ -161,7 +167,7 @@
 <!-- SETUP -->
 <section id="setup">
   <div id="logoSlot"></div>
-  <div class="logo-strap">Coaching-Trainer · Testversion mit Live-Beobachter 💡</div>
+  <div class="logo-strap">Coaching-Trainer · Übungswerkzeug für angehende Coaches</div>
 
   <div class="intro">
     Der virtuelle Klient schildert dir ein Anliegen und reagiert auf deine Fragen wie ein echter Coachee.
@@ -171,9 +177,10 @@
 
   <div class="section-label">1 · Schwierigkeitsgrad</div>
   <div class="levels" id="levels">
+    <button data-level="kooperativ" class="active">Kooperativ</button>
     <button data-level="einsteiger">Einsteiger</button>
     <button data-level="fortgeschritten">Fortgeschritten</button>
-    <button data-level="geuebt" class="active">Geübt</button>
+    <button data-level="geuebt">Geübt</button>
     <button data-level="anspruchsvoll">Anspruchsvoll</button>
   </div>
   <div class="level-desc" id="levelDesc"></div>
@@ -194,11 +201,12 @@
 <section id="chat">
   <div id="messages"></div>
   <div id="endbar">
-    <button class="btn ghost small" id="hintBtn" disabled>💡 Hinweis vom Beobachter</button>
+    <button class="btn ghost small" id="hintBtn" disabled>💡 Unterstützung</button>
     <button class="btn ghost small" id="endBtn" disabled>🎓 Beenden &amp; Feedback</button>
     <button class="btn ghost small" id="pdfBtn" disabled>📄 Protokoll (PDF)</button>
   </div>
   <div id="statusline"></div>
+  <div id="fictionNote">Erfundener Klient — keine echten Fälle eingeben.</div>
   <div id="inputbar">
     <button class="icon-btn mic" id="micBtn" title="Spracheingabe" aria-label="Spracheingabe">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -220,6 +228,7 @@
     <h2>Bevor du startest</h2>
     <p><strong>Dies ist ein Übungswerkzeug mit einem fiktiven, KI-gesteuerten Klienten.</strong> Die Gespräche sind frei erfunden und können eine echte Coaching-Situation nicht ersetzen.</p>
     <p>Die KI kann Fehler machen oder unrealistisch reagieren. Im Zweifel beginnst du das Gespräch einfach neu. Hab keine Angst vor Fehlern – alles ist Fiktion und dient allein dem Üben.</p>
+    <p><strong>Ich gebe keine echten Fälle ein — keine Namen, keine Schulen, keine Situationen, aus denen man jemanden erkennen könnte.</strong></p>
     <p class="muted"><strong>Datenschutz:</strong> Diese App speichert deine Eingaben nicht; beim Neuladen ist alles gelöscht. Zur Erzeugung der Antworten werden deine Eingaben jedoch an den KI-Dienst (Anthropic) übertragen und dort verarbeitet. Gib deshalb <strong>keine echten personenbezogenen Daten realer Personen</strong> ein.</p>
     <button class="btn" id="ackBtn">Verstanden</button>
   </div>
@@ -240,30 +249,31 @@ const ACK_KEY = "coaching_trainer_ack_v1";
    ========================================================= */
 function logoSVG(){
   return `<svg class="logo" viewBox="0 0 480 152" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Oliver Bartels – Systemische Organisationsberatung">
-    <g fill="currentColor" font-family="Arial, Helvetica, sans-serif" font-size="21" letter-spacing="1.4" text-anchor="end">
+    <g fill="#000B3D" font-family="Arial, Helvetica, sans-serif" font-size="21" letter-spacing="1.4" text-anchor="end">
       <text x="404" y="34">OLIVER BARTELS</text>
       <text x="404" y="80">SYSTEMISCHE</text>
       <text x="404" y="126">ORGANISATIONSBERATUNG</text>
     </g>
-    <g fill="#ef8a3c">
+    <g fill="#FF751F">
       <rect x="420" y="12" width="34" height="30" rx="8"/>
       <rect x="420" y="58" width="34" height="30" rx="8"/>
       <rect x="420" y="104" width="34" height="30" rx="8"/>
     </g>
   </svg>`;
 }
-document.getElementById("logoSlot").innerHTML = logoSVG();
+document.getElementById("logoSlot").innerHTML = `<div class="logo-plate">${logoSVG()}</div>`;
 
 /* =========================================================
    STUFEN
    ========================================================= */
 const LEVELS = {
+  kooperativ: { label:"Kooperativ", desc:"Der Klient hilft dir. Für die ersten Versuche: Er antwortet auf jede Frage substanziell, bleibt beim Thema, stellt keine Gegenfragen – und sagt dir, wenn eine Frage etwas bewegt hat." },
   einsteiger: { label:"Einsteiger", desc:"Leichteste Stufe: Der Klient nennt Problem UND ein grobes Ziel gleich von selbst. So kannst du dich auf die Phasen ab der Auftragsklärung konzentrieren." },
   fortgeschritten:{ label:"Fortgeschritten", desc:"Kooperativer Klient, der gut mitgeht – aber Ziel und alle Phasen musst du selbst durch Fragen erarbeiten. Wenig Widerstand." },
   geuebt:     { label:"Geübt",      desc:"Realistisch ambivalent: öffnet sich bei guten Fragen, bleibt bei schwachen Fragen vage. Gute Mischung aus machbar und fordernd." },
   anspruchsvoll:{ label:"Anspruchsvoll", desc:"Echter Widerstand: Ambivalenz, Abwehr, Themenwechsel. Tiefe nur bei wirklich präzisen Fragen. Für geübte Coaches." }
 };
-let selectedLevel = "geuebt";
+let selectedLevel = "kooperativ";
 
 const levelsEl = document.getElementById("levels");
 const levelDescEl = document.getElementById("levelDesc");
@@ -361,6 +371,7 @@ function currentPersonaName(){
 
 async function startConversation(){
   history = []; lastFeedback = null;
+  resetHintCounters();
   messagesEl.innerHTML = "";
   setupEl.style.display = "none";
   chatEl.style.display = "flex";
@@ -370,6 +381,10 @@ async function startConversation(){
   await sendToBackend("__START__");
 }
 
+function resetHintCounters(){
+  hintPressesSinceCoach = 0; hintTotal = 0; firstHintAt = null;
+  conversationStartedAt = Date.now();
+}
 function resetAll(){
   if(busy) return;
   selectedPersona = null; history = []; lastFeedback = null;
@@ -389,7 +404,7 @@ function addMessage(type, text){
   const div = document.createElement("div");
   let cls, label;
   if(type==="feedback"){ cls="feedback"; label="🎓 Neutraler Beobachter – Feedback"; }
-  else if(type==="hint"){ cls="hint"; label="💡 Live-Beobachter – Hinweis"; }
+  else if(type==="hint"){ cls="hint"; label="💡 Unterstützung"; }
   else if(type==="assistant"){ cls="client"; label="Klient"; }
   else { cls="coach"; label="Du (Coach)"; }
   div.className = "msg " + cls;
@@ -397,8 +412,63 @@ function addMessage(type, text){
   who.className = "who"; who.textContent = label;
   div.appendChild(who);
   div.appendChild(document.createTextNode(text));
+  if(type === "feedback") div.appendChild(reportActions(text));
   messagesEl.appendChild(div);
   scrollDown();
+}
+
+/* Bericht mitnehmen: nichts wird gespeichert, also Kopieren und Sichern. */
+function reportActions(text){
+  const wrap = document.createElement("div");
+  wrap.className = "report-actions";
+
+  const copyBtn = document.createElement("button");
+  copyBtn.className = "btn ghost small";
+  copyBtn.textContent = "Bericht kopieren";
+  copyBtn.addEventListener("click", async ()=>{
+    try{ await navigator.clipboard.writeText(text); }
+    catch(_){
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+    }
+    copyBtn.textContent = "Kopiert";
+    setTimeout(()=>{ copyBtn.textContent = "Bericht kopieren"; }, 2500);
+  });
+
+  const saveBtn = document.createElement("button");
+  saveBtn.className = "btn ghost small";
+  saveBtn.textContent = "Als Textdatei sichern";
+  saveBtn.addEventListener("click", ()=>{
+    const d = new Date();
+    const datum = d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"});
+    const content = [
+      "BERICHT DES NEUTRALEN BEOBACHTERS", "",
+      "Datum: " + datum,
+      "Stufe: " + LEVELS[selectedLevel].label,
+      "Klient: " + currentPersonaName(), "",
+      "----------------------------------------", "",
+      text, "",
+      "----------------------------------------",
+      "Coaching-Trainer · Oliver Bartels · Systemische Organisationsberatung", ""
+    ].join("\n");
+    // Rein clientseitig – kein Serverkontakt.
+    const blob = new Blob([content], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Coaching-Bericht_" + d.toISOString().slice(0,10) + ".txt";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  const note = document.createElement("div");
+  note.className = "report-note";
+  note.textContent = "Es wird nichts gespeichert. Wenn du den Bericht behalten möchtest, kopiere oder sichere ihn jetzt.";
+
+  wrap.appendChild(copyBtn); wrap.appendChild(saveBtn); wrap.appendChild(note);
+  return wrap;
 }
 let typingEl = null;
 function showTyping(label){
@@ -420,6 +490,8 @@ async function sendToBackend(userText){
   if(busy) return;
   busy = true; setInputEnabled(false); statusline.textContent = "";
   if(userText !== "__START__"){
+    // Neue Coach-Nachricht: die Druckstufe beginnt wieder bei 1.
+    hintPressesSinceCoach = 0;
     addMessage("user", userText);
     history.push({role:"user", content:userText});
   }
@@ -484,17 +556,29 @@ function autoGrow(){ textInput.style.height="auto"; textInput.style.height=Math.
 textInput.addEventListener("input", autoGrow);
 
 /* =========================================================
-   LIVE-BEOBACHTER (Hinweis auf Knopfdruck)
+   UNTERSTÜTZUNG (dreistufig, auf Knopfdruck)
+   Druck 1 = Rückgabe, Druck 2 = Richtung, Druck 3 = Formulierung.
+   Der Zähler wird bei jeder neuen Coach-Nachricht zurückgesetzt.
    ========================================================= */
+let hintPressesSinceCoach = 0;   // bestimmt die Druckstufe
+let hintTotal = 0;               // Gesamtzahl im Gespräch – für den Bericht
+let firstHintAt = null;          // Zeitpunkt der ersten Anforderung
+let conversationStartedAt = null;
+
 hintBtn.addEventListener("click", requestHint);
 async function requestHint(){
   if(busy || !hasConversation()) return;
+
+  hintPressesSinceCoach += 1;
+  hintTotal += 1;
+  if(firstHintAt === null) firstHintAt = Date.now();
+
   busy = true; setInputEnabled(false); statusline.textContent = "";
-  showTyping("Beobachter überlegt einen Hinweis");
+  showTyping("Beobachter überlegt");
   try{
     const res = await fetch(API_ENDPOINT, {
       method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ mode:"hint", persona: currentBrief(), level: selectedLevel, messages: history })
+      body: JSON.stringify({ mode:"hint", persona: currentBrief(), level: selectedLevel, hintLevel: hintPressesSinceCoach, messages: history })
     });
     if(!res.ok){
       let msg = "Fehler " + res.status;
@@ -515,6 +599,14 @@ async function requestHint(){
 /* =========================================================
    FEEDBACK
    ========================================================= */
+// Der Satz stammt aus dem Client-State, nicht vom Modell – Knopfdrücke
+// kann das Modell nicht zählen. Bei null Anforderungen entfällt er.
+function counterSentence(){
+  if(hintTotal === 0 || firstHintAt === null) return null;
+  const min = Math.max(1, Math.round((firstHintAt - (conversationStartedAt || firstHintAt)) / 60000));
+  const minute = min === 1 ? "einer Minute" : min + " Minuten";
+  return `Du hast in diesem Gespräch ${hintTotal}-mal Unterstützung angefordert, zum ersten Mal nach ${minute}.`;
+}
 endBtn.addEventListener("click", requestFeedback);
 async function requestFeedback(){
   if(busy || !hasCoachTurn()) return;
@@ -531,7 +623,9 @@ async function requestFeedback(){
       throw new Error(msg);
     }
     const data = await res.json();
-    const fb = (data && data.feedback) ? data.feedback.trim() : "(kein Feedback erhalten)";
+    const raw = (data && data.feedback) ? data.feedback.trim() : "(kein Feedback erhalten)";
+    const cs = counterSentence();
+    const fb = cs ? (raw + "\n\n" + cs) : raw;
     lastFeedback = fb;
     hideTyping(); addMessage("feedback", fb);
   }catch(err){
