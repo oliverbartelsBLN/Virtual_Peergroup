@@ -6,134 +6,192 @@
 <title>Coaching-Trainer – Übe mit einem virtuellen Klienten</title>
 <style>
   :root{
-    --bg:#0f1419;
-    --panel:#1a2129;
-    --panel-2:#222c36;
-    --accent:#FF751F;          /* Accent Orange (CD Oliver Bartels) */
-    --accent-2:#ff9552;
-    --accent-ink:#3a1f06;
-    --text:#e8edf2;
-    --muted:#9aa7b2;
-    --client:#263340;
-    --coach:#5a3a1a;
-    --danger:#c2554d;
-    --border:#2c3743;
-    --gold:#d8b878;
+    /* Corporate Design Oliver Bartels */
+    --violet:#2D0E91;      /* Deep Violet  – Überschriften, Bedienelemente, Rahmen (13,3:1) */
+    --navy:#000B3D;        /* Dark Navy    – Fließtext, Chatnachrichten (18,8:1) */
+    --accent:#FF751F;      /* Accent Orange – Linien, Rahmen, Logo-Quadrate, Ladeanzeige */
+    --accent-text:#C24E00; /* dieselbe Farbfamilie, abgedunkelt für Text (4,8:1 auf Weiß) */
+    --bg:#FFFFFF;          /* Generous White */
+    --muted:#5C6270;       /* gedecktes Grau für Fußnoten (6,1:1) */
+    --line:#D9D6E8;        /* zarte Trennlinie, violettstichig */
+    --danger:#A3231B;      /* Fehlertext, 7,0:1 auf Weiß */
+    --text:var(--navy);
+    --border:var(--violet);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{height:100%;margin:0;}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);color:var(--text);
+    background:var(--bg);color:var(--navy);
     display:flex;flex-direction:column;height:100dvh;overflow:hidden;
   }
+  /* Sichtbarer Fokusrahmen in Deep Violet, durchgängig */
+  :focus-visible{outline:2px solid var(--violet);outline-offset:2px;}
+
   header{
-    padding:14px 16px;background:var(--panel);border-bottom:1px solid var(--border);
-    display:flex;align-items:center;gap:12px;flex-shrink:0;
+    padding:14px 22px;background:var(--bg);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:16px;flex-shrink:0;
   }
-  header h1{font-size:16px;margin:0;font-weight:600;letter-spacing:.2px;}
-  header .sub{font-size:12px;color:var(--muted);margin-top:2px;}
-  header .left{flex:1;min-width:0;}
+  header h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--violet);}
+  header .sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  header .left{flex:1;min-width:0;overflow:hidden;}
+  /* Logo oben links, max. 40 px, klickbar zurück zum Start */
+  #headerLogo{flex-shrink:0;background:none;border:0;padding:0;cursor:pointer;line-height:0;}
+  #headerLogo .logo{width:auto;height:40px;}
+
   .btn{
-    border:none;border-radius:10px;padding:11px 16px;font-size:15px;font-weight:600;
-    cursor:pointer;background:var(--accent);color:#fff;transition:transform .05s ease,background .15s,opacity .15s;
+    border:1px solid var(--violet);border-radius:2px;padding:11px 18px;font-size:15px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;
+    cursor:pointer;background:var(--violet);color:#fff;transition:background .15s,color .15s,opacity .15s;
   }
-  .btn:active{transform:scale(.97);}
-  .btn.ghost{background:var(--panel-2);color:var(--text);border:1px solid var(--border);}
-  .btn.small{padding:8px 12px;font-size:13px;}
-  .btn:disabled{opacity:.45;cursor:default;}
+  .btn:hover:not(:disabled){background:var(--navy);border-color:var(--navy);}
+  .btn.ghost{background:var(--bg);color:var(--violet);}
+  .btn.ghost:hover:not(:disabled){background:var(--violet);color:#fff;}
+  .btn.small{padding:9px 14px;font-size:12px;}
+  .btn:disabled{opacity:.4;cursor:default;}
 
   /* ---------- Logo ---------- */
-  .logo{display:block;margin:0 auto;width:260px;max-width:100%;height:auto;}
-  /* Das Logo steht laut CD immer auf Weiß und wird nie umgefärbt. */
-  .logo-plate{display:block;margin:0 auto 10px;background:#FFFFFF;border-radius:4px;
-    padding:14px 18px;width:max-content;max-width:80%;}
-  .logo-strap{text-align:center;color:var(--muted);font-size:12px;letter-spacing:.5px;margin-bottom:20px;}
+  .logo{display:block;margin:0 auto;width:300px;max-width:100%;height:auto;}
+  .logo-strap{text-align:center;color:var(--muted);font-size:12px;letter-spacing:.06em;margin:14px 0 34px;}
 
   /* ---------- Setup screen ---------- */
-  #setup{flex:1;overflow-y:auto;padding:22px 16px 40px;-webkit-overflow-scrolling:touch;}
-  #setup .intro{max-width:680px;margin:0 auto 18px;color:var(--muted);font-size:14px;line-height:1.5;}
-  .section-label{max-width:680px;margin:0 auto 8px;font-size:13px;font-weight:600;color:var(--text);}
-  .levels{max-width:680px;margin:0 auto 6px;display:flex;gap:8px;flex-wrap:wrap;}
+  #setup{flex:1;overflow-y:auto;padding:40px 22px 48px;-webkit-overflow-scrolling:touch;}
+  #setup .intro{max-width:680px;margin:0 auto 40px;color:var(--navy);font-size:15px;line-height:1.7;}
+  .section-label{max-width:680px;margin:0 auto 14px;font-size:20px;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--accent-text);}
+  .levels{max-width:680px;margin:0 auto 10px;display:flex;gap:10px;flex-wrap:wrap;}
   .levels button{
-    flex:1 1 110px;border:1px solid var(--border);background:var(--panel);color:var(--text);
-    border-radius:12px;padding:10px 6px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;
+    flex:1 1 110px;border:1px solid var(--line);background:var(--bg);color:var(--violet);
+    border-radius:2px;padding:12px 6px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;
   }
-  .levels button.active{border-color:var(--accent);background:rgba(239,138,60,.16);color:var(--accent-2);}
-  .level-desc{max-width:680px;margin:0 auto 20px;font-size:12.5px;color:var(--muted);line-height:1.45;min-height:34px;}
-  .grid{max-width:680px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:12px;}
+  .levels button:hover{border-color:var(--violet);}
+  .levels button.active{border-color:var(--violet);border-left:3px solid var(--accent);color:var(--violet);}
+  .level-desc{max-width:680px;margin:0 auto 40px;font-size:14px;color:var(--navy);line-height:1.7;min-height:44px;}
+  .grid{max-width:680px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:16px;}
   @media(min-width:620px){.grid{grid-template-columns:1fr 1fr;}}
   .card{
-    background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;
-    cursor:pointer;transition:border-color .15s,background .15s;
+    background:var(--bg);border:1px solid var(--line);border-radius:2px;padding:20px;
+    cursor:pointer;transition:border-color .15s;
   }
-  .card:hover{border-color:var(--accent);}
-  .card.selected{border-color:var(--accent);background:var(--panel-2);}
-  .card h3{margin:0 0 6px;font-size:15px;}
-  .card .tag{display:inline-block;font-size:11px;color:var(--accent-2);background:rgba(239,138,60,.14);
-    padding:2px 8px;border-radius:20px;margin-bottom:8px;}
-  .card p{margin:0;font-size:13px;color:var(--muted);line-height:1.45;}
+  .card:hover{border-color:var(--violet);}
+  .card.selected{border-color:var(--violet);border-left:3px solid var(--accent);}
+  .card h3{margin:0 0 8px;font-size:15px;color:var(--violet);font-weight:700;}
+  .card .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--violet);border:1px solid var(--line);padding:3px 8px;border-radius:2px;margin-bottom:10px;}
+  .card p{margin:0;font-size:14px;color:var(--navy);line-height:1.65;}
   .card.random{border-style:dashed;text-align:center;}
-  .start-bar{max-width:680px;margin:20px auto 0;display:flex;gap:10px;}
+  .start-bar{max-width:680px;margin:36px auto 0;display:flex;gap:10px;}
   .start-bar .btn{flex:1;}
-  .footnote{max-width:680px;margin:26px auto 0;text-align:center;}
+  .footnote{max-width:680px;margin:32px auto 0;text-align:center;}
   .footnote a{color:var(--muted);font-size:12px;text-decoration:underline;cursor:pointer;}
+
+  /* ---------- Phasenleiste am linken Seitenrand ---------- */
+  /* Rein statisch und orientierend – keine Erkennung der aktuellen Phase. */
+  #phaseRail{display:none;}
+  @media(min-width:1320px){
+    #phaseRail{display:block;position:fixed;left:26px;top:50%;transform:translateY(-50%);
+      pointer-events:none;z-index:5;}
+    #phaseRail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px;}
+    #phaseRail li{display:flex;align-items:baseline;gap:10px;color:var(--muted);font-size:11px;
+      letter-spacing:.05em;line-height:1.3;}
+    #phaseRail .num{width:26px;text-align:right;flex-shrink:0;}
+    #phaseRail .nm{max-width:130px;}
+  }
 
   /* ---------- Chat screen ---------- */
   #chat{display:none;flex-direction:column;flex:1;min-height:0;}
-  #messages{flex:1;overflow-y:auto;padding:16px 14px 8px;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;}
-  .msg{max-width:84%;margin:0 0 12px;padding:11px 14px;border-radius:16px;font-size:15px;line-height:1.5;
-    white-space:pre-wrap;word-wrap:break-word;animation:pop .18s ease;}
-  @keyframes pop{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-  .msg.client{background:var(--client);border-bottom-left-radius:5px;align-self:flex-start;margin-right:auto;}
-  .msg.coach{background:var(--coach);border-bottom-right-radius:5px;align-self:flex-end;margin-left:auto;}
-  .msg .who{font-size:11px;color:var(--muted);margin-bottom:3px;display:block;}
-  .msg.feedback{align-self:stretch;max-width:100%;background:#241f2e;border:1px solid var(--gold);
-    border-radius:14px;margin:6px 0 14px;padding:14px 16px;}
-  .msg.feedback .who{color:var(--gold);font-weight:600;font-size:12px;letter-spacing:.4px;text-transform:uppercase;}
-  .msg.hint{align-self:stretch;max-width:100%;background:rgba(79,157,166,.10);border:1px dashed #4f9da6;
-    border-radius:14px;margin:4px 0 14px;padding:12px 14px;font-size:14px;}
-  .msg.hint .who{color:#6fc3bf;font-weight:600;font-size:11px;letter-spacing:.4px;text-transform:uppercase;}
-  .typing{align-self:flex-start;color:var(--muted);font-style:italic;font-size:14px;margin-bottom:12px;padding:0 6px;}
-  .dots span{animation:blink 1.2s infinite both;}
-  .dots span:nth-child(2){animation-delay:.2s;}
-  .dots span:nth-child(3){animation-delay:.4s;}
-  @keyframes blink{0%,80%,100%{opacity:.2;}40%{opacity:1;}}
+  #messages{flex:1;overflow-y:auto;padding:26px 22px 10px;-webkit-overflow-scrolling:touch;}
+  #msgcol{display:flex;flex-direction:column;gap:16px;}
+  #messages > *{width:100%;}
+  /* Eine zentrierte Spalte; die Phasenleiste sitzt im freien linken Rand. */
+  #messages, #endbar, #statusline, #fictionNote, #inputbar > *{max-width:none;}
+  .chatcol{width:100%;max-width:880px;margin:0 auto;}
+  /* Unterscheidung über Ausrichtung und dünnen Rahmen, nicht über Farbflächen. */
+  .msg{max-width:62ch;margin:0;padding:16px 18px;border:1px solid var(--violet);border-radius:2px;
+    background:var(--bg);color:var(--navy);font-size:15px;line-height:1.7;
+    white-space:pre-wrap;word-wrap:break-word;}
+  .msg.client{align-self:flex-start;margin-right:auto;}
+  .msg.coach{align-self:flex-end;margin-left:auto;border-right:2px solid var(--accent);}
+  .msg .who{font-size:11px;color:var(--violet);margin-bottom:8px;display:block;
+    font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+  /* Der Bericht: gleiche Bauform, ausgezeichnet durch eine 3px-Linie in Orange darüber. */
+  .msg.feedback{align-self:stretch;max-width:100%;border-top:3px solid var(--accent);padding:24px;}
+  .msg.feedback .who{color:var(--accent-text);font-size:20px;letter-spacing:.06em;margin-bottom:16px;}
+  .msg.feedback .msgtext, .msg.hint .msgtext{max-width:62ch;}
+  .msg.hint{align-self:stretch;max-width:100%;border-left:3px solid var(--accent);}
+  .msg.hint .who{color:var(--violet);}
+  /* Ladeanzeige: drei kleine Quadrate in Accent Orange – das Motiv aus dem Logo. */
+  .typing{align-self:flex-start;display:flex;align-items:center;gap:10px;
+    color:var(--muted);font-size:13px;padding:4px 2px;}
+  .dots{display:inline-flex;gap:6px;}
+  .dots span{width:9px;height:9px;border-radius:2px;background:var(--accent);
+    animation:blink 1.2s infinite both;font-size:0;}
+  .dots span:nth-child(2){animation-delay:.18s;}
+  .dots span:nth-child(3){animation-delay:.36s;}
+  @keyframes blink{0%,80%,100%{opacity:.22;}40%{opacity:1;}}
 
-  #endbar{padding:8px 12px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
-  #endbar .btn{flex:1;min-width:140px;max-width:260px;}
-  #statusline{font-size:12px;color:var(--muted);text-align:center;padding:4px 12px 0;min-height:18px;}
+  #endbar{padding:14px 22px 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:880px;margin:0 auto;width:100%;}
+  #endbar .btn{flex:1;min-width:150px;max-width:250px;}
+  #statusline{font-size:12px;color:var(--muted);text-align:center;padding:8px 22px 0;min-height:20px;}
   .err{color:var(--danger);}
 
-  #fictionNote{max-width:820px;margin:0 auto;padding:0 14px 4px;font-size:12px;color:var(--muted);}
-  .report-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
-  .report-note{flex-basis:100%;font-size:12px;color:var(--muted);margin-top:2px;}
+  #fictionNote{max-width:880px;margin:0 auto;padding:0 22px 8px;font-size:12px;color:var(--muted);}
+  .report-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .report-note{flex-basis:100%;font-size:12px;color:var(--muted);margin-top:4px;line-height:1.6;}
+
+  /* ---------- Fußzeile ---------- */
+  #brandFoot{flex-shrink:0;text-align:center;font-size:10px;letter-spacing:.18em;
+    color:var(--muted);text-transform:uppercase;padding:10px 12px 12px;}
+
   /* ---------- Input bar ---------- */
-  #inputbar{flex-shrink:0;border-top:1px solid var(--border);background:var(--panel);
-    padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;}
-  #textInput{flex:1;resize:none;border:1px solid var(--border);background:var(--panel-2);color:var(--text);
-    border-radius:14px;padding:11px 14px;font-size:16px;line-height:1.4;max-height:120px;font-family:inherit;}
-  #textInput:focus{outline:none;border-color:var(--accent);}
-  .icon-btn{flex-shrink:0;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;background:var(--panel-2);color:var(--text);
-    border:1px solid var(--border);transition:background .15s,transform .05s;}
-  .icon-btn:active{transform:scale(.93);}
-  .icon-btn.send{background:var(--accent);border-color:var(--accent);}
-  .icon-btn.mic.recording{background:var(--danger);border-color:var(--danger);animation:pulse 1.2s infinite;}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(194,85,77,.5);}70%{box-shadow:0 0 0 12px rgba(194,85,77,0);}100%{box-shadow:0 0 0 0 rgba(194,85,77,0);}}
+  #inputbar{flex-shrink:0;border-top:1px solid var(--line);background:var(--bg);
+    padding:14px 22px calc(10px + env(safe-area-inset-bottom));}
+  #inputbar .chatcol{display:flex;gap:10px;align-items:flex-end;}
+  #textInput{flex:1;resize:none;border:1px solid var(--violet);background:var(--bg);color:var(--navy);
+    border-radius:2px;padding:13px 15px;font-size:16px;line-height:1.6;max-height:120px;font-family:inherit;}
+  #textInput::placeholder{color:var(--muted);}
+  .icon-btn{flex-shrink:0;width:48px;height:48px;border-radius:2px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--violet);
+    border:1px solid var(--violet);transition:background .15s,color .15s;}
+  .icon-btn:hover:not(:disabled){background:var(--violet);color:#fff;}
+  .icon-btn.send{background:var(--violet);border-color:var(--violet);color:#fff;}
+  .icon-btn.send:hover:not(:disabled){background:var(--navy);border-color:var(--navy);}
+  .icon-btn:disabled{opacity:.4;cursor:default;}
+  .icon-btn.mic.recording{background:var(--accent);border-color:var(--accent);color:#fff;}
   .icon-btn svg{width:22px;height:22px;}
 
-  /* ---------- Disclaimer overlay ---------- */
-  #overlay{position:fixed;inset:0;background:rgba(8,11,15,.82);backdrop-filter:blur(3px);
-    display:none;align-items:center;justify-content:center;padding:18px;z-index:50;}
-  #overlay.show{display:flex;}
-  .modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;max-width:520px;width:100%;
-    padding:22px;max-height:88dvh;overflow-y:auto;}
-  .modal h2{margin:0 0 12px;font-size:18px;}
-  .modal p{font-size:13.5px;line-height:1.55;color:var(--text);margin:0 0 12px;}
-  .modal p.muted{color:var(--muted);font-size:12.5px;}
-  .modal .btn{width:100%;margin-top:6px;}
+  /* ---------- Schmale Bildschirme ---------- */
+  @media(max-width:520px){
+    header{padding:10px 14px;gap:10px;}
+    header h1{font-size:12px;letter-spacing:.07em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    header .sub{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    #headerLogo .logo{height:30px;}
+    header .btn.small{padding:8px 10px;font-size:11px;}
+    #setup{padding:26px 14px 36px;}
+    #messages{padding:18px 14px 8px;}
+    .msg{padding:14px 15px;}
+    #endbar{padding:12px 14px 0;}
+    #endbar .btn{min-width:0;max-width:none;flex:1 1 46%;}
+    #fictionNote{padding:0 14px 6px;}
+    #inputbar{padding:10px 12px calc(8px + env(safe-area-inset-bottom));}
+    #inputbar .chatcol{gap:8px;}
+    .icon-btn{width:44px;height:44px;}
+    #textInput{padding:11px 12px;}
+    #brandFoot{font-size:9px;letter-spacing:.14em;padding:8px 10px 10px;}
+  }
 
+  /* ---------- Disclaimer overlay ---------- */
+  #overlay{position:fixed;inset:0;background:rgba(0,11,61,.34);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+  #overlay.show{display:flex;}
+  .modal{background:var(--bg);border:1px solid var(--violet);border-top:3px solid var(--accent);
+    border-radius:2px;max-width:560px;width:100%;padding:30px;max-height:88dvh;overflow-y:auto;}
+  .modal h2{margin:0 0 20px;font-size:20px;color:var(--accent-text);font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;}
+  .modal p{font-size:14px;line-height:1.7;color:var(--navy);margin:0 0 16px;}
+  .modal p.muted{color:var(--muted);font-size:13px;}
+  .modal .btn{width:100%;margin-top:10px;}
   /* ---------- Druck / PDF ---------- */
   #printArea{display:none;}
   @media print{
@@ -157,6 +215,7 @@
 <body>
 
 <header>
+  <button id="headerLogo" title="Zurück zum Start" aria-label="Zurück zum Start"></button>
   <div class="left">
     <h1 id="hTitle">Coaching-Trainer</h1>
     <div class="sub" id="hSub">Wähle einen Klienten und beginne das Gespräch.</div>
@@ -172,7 +231,7 @@
   <div class="intro">
     Der virtuelle Klient schildert dir ein Anliegen und reagiert auf deine Fragen wie ein echter Coachee.
     Übe ein vollständiges Gespräch – von der Problemschilderung über Ziel, Auftrag und Lösungsbild bis zu konkreten Maßnahmen.
-    Tippe deine Fragen oder nutze das Mikrofon 🎤.
+    Tippe deine Fragen oder nutze die Spracheingabe.
   </div>
 
   <div class="section-label">1 · Schwierigkeitsgrad</div>
@@ -199,15 +258,25 @@
 
 <!-- CHAT -->
 <section id="chat">
-  <div id="messages"></div>
+  <nav id="phaseRail" aria-hidden="true">
+    <ol>
+      <li><span class="num">I</span><span class="nm">Problemschilderung</span></li>
+      <li><span class="num">II</span><span class="nm">Zieldefinition</span></li>
+      <li><span class="num">III</span><span class="nm">Auftragsklärung</span></li>
+      <li><span class="num">IV</span><span class="nm">Zielerreichungskriterien</span></li>
+      <li><span class="num">V</span><span class="nm">Lösungsbild</span></li>
+      <li><span class="num">VI</span><span class="nm">Maßnahmen</span></li>
+    </ol>
+  </nav>
+  <div id="messages"><div class="chatcol" id="msgcol"></div></div>
   <div id="endbar">
-    <button class="btn ghost small" id="hintBtn" disabled>💡 Unterstützung</button>
-    <button class="btn ghost small" id="endBtn" disabled>🎓 Beenden &amp; Feedback</button>
-    <button class="btn ghost small" id="pdfBtn" disabled>📄 Protokoll (PDF)</button>
+    <button class="btn ghost small" id="hintBtn" disabled>Unterstützung</button>
+    <button class="btn ghost small" id="endBtn" disabled>Beenden &amp; Feedback</button>
+    <button class="btn ghost small" id="pdfBtn" disabled>Protokoll (PDF)</button>
   </div>
   <div id="statusline"></div>
   <div id="fictionNote">Erfundener Klient — keine echten Fälle eingeben.</div>
-  <div id="inputbar">
+  <div id="inputbar"><div class="chatcol">
     <button class="icon-btn mic" id="micBtn" title="Spracheingabe" aria-label="Spracheingabe">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
@@ -221,6 +290,8 @@
     </button>
   </div>
 </section>
+
+<footer id="brandFoot">Oliver Bartels · Systemische Organisationsberatung</footer>
 
 <!-- DISCLAIMER OVERLAY -->
 <div id="overlay">
@@ -261,7 +332,11 @@ function logoSVG(){
     </g>
   </svg>`;
 }
-document.getElementById("logoSlot").innerHTML = `<div class="logo-plate">${logoSVG()}</div>`;
+document.getElementById("logoSlot").innerHTML = logoSVG();
+document.getElementById("headerLogo").innerHTML = logoSVG();
+document.getElementById("headerLogo").addEventListener("click", () => {
+  if (chatEl.style.display === "flex") resetAll();
+});
 
 /* =========================================================
    STUFEN
@@ -372,7 +447,7 @@ function currentPersonaName(){
 async function startConversation(){
   history = []; lastFeedback = null;
   resetHintCounters();
-  messagesEl.innerHTML = "";
+  document.getElementById("msgcol").innerHTML = "";
   setupEl.style.display = "none";
   chatEl.style.display = "flex";
   resetBtn.style.display = "inline-block";
@@ -403,17 +478,20 @@ function resetAll(){
 function addMessage(type, text){
   const div = document.createElement("div");
   let cls, label;
-  if(type==="feedback"){ cls="feedback"; label="🎓 Neutraler Beobachter – Feedback"; }
-  else if(type==="hint"){ cls="hint"; label="💡 Unterstützung"; }
+  if(type==="feedback"){ cls="feedback"; label="Bericht des neutralen Beobachters"; }
+  else if(type==="hint"){ cls="hint"; label="Unterstützung"; }
   else if(type==="assistant"){ cls="client"; label="Klient"; }
   else { cls="coach"; label="Du (Coach)"; }
   div.className = "msg " + cls;
   const who = document.createElement("span");
   who.className = "who"; who.textContent = label;
   div.appendChild(who);
-  div.appendChild(document.createTextNode(text));
+  const body = document.createElement("div");
+  body.className = "msgtext";
+  body.textContent = text;
+  div.appendChild(body);
   if(type === "feedback") div.appendChild(reportActions(text));
-  messagesEl.appendChild(div);
+  (document.getElementById("msgcol")||messagesEl).appendChild(div);
   scrollDown();
 }
 
@@ -475,7 +553,7 @@ function showTyping(label){
   typingEl = document.createElement("div");
   typingEl.className = "typing";
   typingEl.innerHTML = `${label || "Klient denkt nach"} <span class="dots"><span>.</span><span>.</span><span>.</span></span>`;
-  messagesEl.appendChild(typingEl);
+  (document.getElementById("msgcol")||messagesEl).appendChild(typingEl);
   scrollDown();
 }
 function hideTyping(){ if(typingEl){typingEl.remove();typingEl=null;} }
@@ -552,8 +630,16 @@ function send(){
 }
 sendBtn.addEventListener("click", send);
 textInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); send(); }});
-function autoGrow(){ textInput.style.height="auto"; textInput.style.height=Math.min(textInput.scrollHeight,120)+"px"; }
+function autoGrow(){
+  textInput.style.height="auto";
+  const h = textInput.scrollHeight;
+  textInput.style.height = Math.min(h,120)+"px";
+  textInput.style.overflowY = h > 120 ? "auto" : "hidden";
+}
 textInput.addEventListener("input", autoGrow);
+// Auf schmalen Bildschirmen kürzerer Platzhalter, damit er nicht umbricht
+if (window.matchMedia("(max-width:520px)").matches) textInput.placeholder = "Deine Frage …";
+autoGrow();
 
 /* =========================================================
    UNTERSTÜTZUNG (dreistufig, auf Knopfdruck)
@@ -689,7 +775,7 @@ if(SpeechRecognition){
     if(finalT) baseText = (baseText + " " + finalT).trim();
     textInput.value = (baseText + " " + interim).trim(); autoGrow();
   });
-  recognition.addEventListener("start",()=>{ recording=true; micBtn.classList.add("recording"); statusline.textContent="🎤 Ich höre zu…"; baseText=textInput.value.trim(); });
+  recognition.addEventListener("start",()=>{ recording=true; micBtn.classList.add("recording"); statusline.textContent="Ich höre zu …"; baseText=textInput.value.trim(); });
   recognition.addEventListener("end",()=>{ recording=false; micBtn.classList.remove("recording"); statusline.textContent=""; });
   recognition.addEventListener("error",(e)=>{
     recording=false; micBtn.classList.remove("recording");
